@@ -28,12 +28,14 @@ publicRouter.post("/login", async (req, res) => {
 
     const accessToken = createTokens(user);
 
-    res.cookie("access-token", accessToken, {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-    });
+    // res.cookie("access-token", accessToken, {
+    //   maxAge: 1000 * 60 * 60 * 24,
+    //   httpOnly: false,
+    //   secure: true,
+    //   sameSite: "none",
+    // });
+
+    return res.status(200).json({ accessToken });
   } catch (err) {
     return res.status(400).json({ err });
   }

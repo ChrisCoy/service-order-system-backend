@@ -14,8 +14,8 @@ interface IRequestValidate extends Request {
 export const createTokens = (user: IUserData) => {
   const accessToken = sign(
     { _id: user._id, name: user.name, isAdmin: user.isAdmin, role: user.role },
-    process.env.JWT_SECRET as string
-    // { expiresIn: 60 * 60 * 24 }
+    process.env.JWT_SECRET as string,
+    { expiresIn: 60 }
   );
   return accessToken;
 };
