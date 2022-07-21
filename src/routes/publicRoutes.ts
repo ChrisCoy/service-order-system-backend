@@ -29,8 +29,7 @@ publicRouter.post("/login", async (req, res) => {
 
   res.cookie("access-token", accessToken, {
     maxAge: 1000 * 60 * 60 * 24,
-    sameSite: "none",
-    secure: true,
+    httpOnly: false,
   });
 
   console.log(accessToken);
@@ -47,6 +46,12 @@ publicRouter.post("/validate", validateToken, (req: IRequestValidate, res) => {
   if (req.authenticated) {
     return res.status(200).send();
   }
+
+
+  console.log("Cookies: ", req.cookies);
+
+  // Cookies that have been signed
+  console.log("Signed Cookies: ", req.signedCookies);
 
   return res.status(400).json({ err: "Invalid or expired session." });
 });

@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: process.env.TRUST_LINK as string,
+    origin: (process.env.TRUST_LINK as string) || true,
   })
 );
 
@@ -22,4 +22,7 @@ app.use("/", publicRouter);
 connectDB();
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log("IS ALIVE!!!! on PORT " + PORT));
+app.listen(PORT, () => {
+  console.log("IS ALIVE!!!! on PORT " + PORT);
+  console.log("TRUSTED: " + process.env.TRUST_LINK);
+});
