@@ -39,8 +39,6 @@ publicRouter.post("/login", async (req, res) => {
   } catch (err) {
     return res.status(400).json({ err });
   }
-
-  return res.status(200).send();
 });
 
 publicRouter.post("/validate", validateToken, (req: IRequestValidate, res) => {

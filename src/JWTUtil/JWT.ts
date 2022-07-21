@@ -21,7 +21,7 @@ export const createTokens = (user: IUserData) => {
 };
 
 export const validateToken = (req: IRequestValidate, res: Response, next: NextFunction) => {
-  const accessToken = req.cookies["access-token"];
+  const { accessToken } = req.body;
 
   if (!accessToken) {
     return res.status(400).json({ err: "User not Authenticated" });
