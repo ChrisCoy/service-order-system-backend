@@ -13,8 +13,6 @@ interface IRequestValidate extends Request {
 publicRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(email, password);
-
   const user = await User.findOne({ email: email });
   if (!user) {
     res.status(400).json({ err: "Invalid Credentials!" });
@@ -31,7 +29,16 @@ publicRouter.post("/login", async (req, res) => {
 
   res.cookie("access-token", accessToken, {
     maxAge: 1000 * 60 * 60 * 24,
+    sameSite: "none",
+    secure: true,
   });
+
+  console.log(accessToken);
+
+  console.log("Cookies: ", req.cookies);
+
+  // Cookies that have been signed
+  console.log("Signed Cookies: ", req.signedCookies);
 
   res.status(200).send();
 });
