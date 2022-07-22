@@ -16,14 +16,15 @@ publicRouter.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email: email });
     if (!user) {
-      res.status(400).json({ err: "Invalid Credentials!" });
-      return;
+      // return res.status(400).json({ err: "Invalid Credentials!" });
+      return res.status(400).json({ err: "Usuario nao cadastrado!" });
     }
+
+    console.log(user);
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      res.status(400).json({ err: "Invalid Credentials!" });
-      return;
+      return res.status(400).json({ err: "Invalid Credentials!" });
     }
 
     const accessToken = createTokens(user);
@@ -45,11 +46,5 @@ publicRouter.post("/validate", validateToken, (req: IRequestValidate, res) => {
   if (req.authenticated) {
     return res.status(200).send();
   }
-
-  console.log("Cookies: ", req.cookies);
-
-  // Cookies that have been signed
-  console.log("Signed Cookies: ", req.signedCookies);
-
   return res.status(400).json({ err: "Invalid or expired session." });
 });
