@@ -4,6 +4,7 @@ import { publicRouter } from "./routes/publicRoutes";
 import { connectDB } from "./DBconnection/mongoUtil";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { roleRouter } from "./routes/roleRoutes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
 
 app.use("/", adminRouter);
 app.use("/", publicRouter);
+app.use("/role", roleRouter);
 
 connectDB();
 

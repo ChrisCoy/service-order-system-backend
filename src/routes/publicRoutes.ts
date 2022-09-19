@@ -20,8 +20,6 @@ publicRouter.post("/login", async (req, res) => {
       return res.status(400).json({ err: "Usuario nao cadastrado!" });
     }
 
-    console.log(user);
-
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(400).json({ err: "Invalid Credentials!" });
@@ -38,6 +36,7 @@ publicRouter.post("/login", async (req, res) => {
 
     return res.status(200).json({ accessToken });
   } catch (err) {
+    console.error(err);
     return res.status(400).json({ err });
   }
 });

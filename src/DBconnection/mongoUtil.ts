@@ -24,10 +24,11 @@ export const connectDB = () => {
           isAdmin: true,
         })
           .save()
-          .catch((err) => err.code !== 11000 && console.log(err));
+          .catch((err) => err.code !== 11000 && console.error(err));
       });
 
-      console.log("Connected on DB with success.");
+      console.info("Connected on DB with success.");
+      
     })
     .catch((err) => console.error("ERROR ON DB CONNECTION: " + err));
 };

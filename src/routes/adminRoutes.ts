@@ -7,10 +7,9 @@ import type { IRequestValidate } from "../JWTUtil/JWT";
 
 export const adminRouter = express.Router();
 
-adminRouter.post("/register", validateToken, async (req, res) => {
+adminRouter.post("/user/register", validateToken, async (req, res) => {
   try {
     const { name, email, password, role } = req.body.data;
-    console.log(name, email, password, role);
 
     if (!name || !email || !password || !role) {
       return res.status(500).json({ err: "Invalid Data!" });
@@ -26,15 +25,38 @@ adminRouter.post("/register", validateToken, async (req, res) => {
     }).save();
     return res.status(200).send();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ err });
   }
 });
 
-adminRouter.post("/update-user", validateToken, async (req, res) => {
+adminRouter.post("/user/remove/:id", validateToken, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!userId) {
+      return res.status(500).json({ err: "Invalid Data!" });
+    }
+
+    const user = await User.findOne({ _id: userId });
+
+    if (user && !user.isAdmin) {
+      user.remove();
+    }
+
+    if (user.isAdmin) {
+      return res.status(500).json({ err: "Cannot remove a admin!" });
+    }
+
+    return res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ err });
+  }
+});
+
+adminRouter.post("/user/update", validateToken, async (req, res) => {
   try {
     const { name, email, password, role, _id } = req.body.data;
-    console.log(name, email, password, role);
 
     if (!name || !email || !password || !role || !_id) {
       return res.status(500).json({ err: "Invalid Data!" });
@@ -54,35 +76,9 @@ adminRouter.post("/update-user", validateToken, async (req, res) => {
 
     return res.status(200).send();
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ err });
   }
-});
-
-adminRouter.post("/role/add", async (req, res) => {
-  const { name } = req.body;
-
-  const newRole = new Role({
-    name,
-  });
-
-  try {
-    await newRole.save();
-  } catch (err) {
-    return res.status(500).json({ err: "Error saving user." });
-  }
-  return res.status(200).send();
-});
-
-adminRouter.post("/role/list", validateToken, async (req: IRequestValidate, res) => {
-  if (!req.isAdmin) {
-    return res.status(400).json({ err: "Access denied." });
-  }
-
-  const roleList = await Role.find();
-  console.log(roleList);
-
-  return res.status(200).json({ roleList });
 });
 
 adminRouter.post("/user/list", validateToken, async (req: IRequestValidate, res) => {
@@ -91,8 +87,6 @@ adminRouter.post("/user/list", validateToken, async (req: IRequestValidate, res)
   }
 
   const userList = await User.find().populate("role");
-
-  console.log(userList);
 
   return res.status(200).json({ userList });
 });

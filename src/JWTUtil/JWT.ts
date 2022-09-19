@@ -39,7 +39,6 @@ export const validateToken = (req: IRequestValidate, res: Response, next: NextFu
       return next();
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ err: err });
   }
 };
