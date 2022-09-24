@@ -50,7 +50,7 @@ roleRouter.post("/remove/:id", validateToken, async (req, res) => {
     }
 
     const user = await User.findOne({ role: roleId });
-    
+
     if (user) {
       return res.status(500).json({ err: "Role in use!" });
     }
@@ -70,10 +70,6 @@ roleRouter.post("/remove/:id", validateToken, async (req, res) => {
 
 roleRouter.post("/list", validateToken, async (req: IRequestValidate, res) => {
   try {
-    if (!req.isAdmin) {
-      return res.status(400).json({ err: "Access denied." });
-    }
-
     const roleList = await Role.find();
 
     return res.status(200).json({ roleList });

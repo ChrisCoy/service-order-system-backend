@@ -14,6 +14,15 @@ export interface IRequestValidate extends Request {
   isAdmin?: false | boolean;
 }
 
+interface valideAndReturnUserFunc {
+  _id: string;
+  name: string;
+  isAdmin: boolean;
+  role: string;
+  iat?: number;
+  exp?: number;
+}
+
 export const createTokens = (user: IUserData) => {
   const accessToken = sign(
     { _id: user._id, name: user.name, isAdmin: user.isAdmin, role: user.role },
@@ -40,5 +49,20 @@ export const validateToken = (req: IRequestValidate, res: Response, next: NextFu
     }
   } catch (err) {
     return res.status(500).json({ err: err });
+  }
+};
+
+export const valideAndReturnUser = (token: any): valideAndReturnUserFunc => {
+  try {
+    const validToken = verify(JSON.parse(token as string), process.env.JWT_SECRET as string);
+
+    if (!validToken) {
+      throw new Error("Invalid Token");
+    }
+
+    return validToken as valideAndReturnUserFunc;
+  } catch (err) {
+    console.error(err);
+    throw new Error("Invalid Token");
   }
 };
