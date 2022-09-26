@@ -65,7 +65,9 @@ io.on("connection", async (socket) => {
       const calls = await Call.find({ sector: validUser.role })
         .populate("sector")
         .populate("author")
-        .sort({ date: -1 });
+        .sort({ date: 1 });
+
+      console.log("enviando todas ordems");
 
       return calls.map((call: any): any => {
         return {
@@ -95,7 +97,24 @@ io.on("connection", async (socket) => {
         sector: order.sector,
       }).save();
 
-      io.emit("update-orders", newOrder);
+      if (newOrder.sector._id.toString() == validUser.role) {
+        const callToReturn: any = await Call.find({ _id: newOrder._id })
+          .populate("sector")
+          .populate("author");
+
+        io.emit(
+          "update-orders",
+          callToReturn.map((call: any): any => {
+            return {
+              _id: call._id,
+              date: call.date,
+              resume: call.resume,
+              author: call.author.name,
+              sector: call.sector.name,
+            };
+          })[0]
+        );
+      }
     } catch (err) {
       console.error(err);
     }
