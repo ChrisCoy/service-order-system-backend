@@ -1,5 +1,5 @@
 import express from "express";
-import { IRequestValidate, validateToken } from "../JWTUtil/JWT";
+import { validateToken } from "../JWTUtil/JWT";
 import { Role } from "../models/Role";
 import { User } from "../models/User";
 
@@ -68,11 +68,28 @@ roleRouter.post("/remove/:id", validateToken, async (req, res) => {
   }
 });
 
-roleRouter.post("/list", validateToken, async (req: IRequestValidate, res) => {
+roleRouter.post("/list", validateToken, async (req, res) => {
   try {
     const roleList = await Role.find();
 
     return res.status(200).json({ roleList });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ err: err });
+  }
+});
+
+roleRouter.post("/getRole/:id", validateToken, async (req, res) => {
+  try {
+    const roleId = req.params.id;
+
+    if (!roleId || roleId === "undefined") {
+      return res.status(500).json({ err: "Not found" });
+    }
+
+    const role = await Role.findById(roleId);
+
+    return res.status(200).json({ role });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ err: err });

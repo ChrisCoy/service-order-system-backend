@@ -18,33 +18,27 @@ export default function socketServer(httpServer: http.Server) {
     const validUser = valideAndReturnUser(token);
     const userRole = validUser.isAdmin ? "admin" : validUser.role;
 
-    console.log(`user role: ${validUser.role}`);
     socket.join(userRole);
 
     socket.on("disconnecting", () => {
-      console.log("desconectando");
-      console.log(socket.rooms);
       socket.rooms.clear();
-      console.log(socket.rooms);
       socket.rooms.size === 0;
     });
 
     async function getCalls() {
-      console.log("sending all calls");
-
       try {
         const calls = await Call.find(!validUser.isAdmin ? { sector: validUser.role } : {})
           .populate("sector")
           .populate("author")
-          .sort({ date: 1 });
+          .sort({ _id: -1 });
 
         return calls.map((call: any): any => {
           return {
             _id: call._id,
-            date: call.date,
-            resume: call.resume,
-            author: call.author.name,
-            sector: call.sector.name,
+            date: call.date || "",
+            resume: call.resume || "",
+            author: call.author?.name || "",
+            sector: call.sector?.name || "",
           };
         });
       } catch (error) {
@@ -77,8 +71,6 @@ export default function socketServer(httpServer: http.Server) {
             sector: call.sector.name,
           };
         })[0];
-
-        console.log(call[0].sector?._id?.toString());
 
         io.to(call[0].sector?._id?.toString()).to("admin").emit("update-orders", treatedCall);
       } catch (err) {
