@@ -8,6 +8,7 @@ export default function socketServer(httpServer: http.Server) {
   const io = new Server(httpServer, {
     cors: {
       origin: (process.env.TRUST_LINK as string) || true,
+      allowedHeaders: ["token"],
     },
   });
 
