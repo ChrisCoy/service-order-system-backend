@@ -30,8 +30,8 @@ connectDB();
 
 //turn on socket
 socketServer(server);
-server.listen(3002, () => {
-  console.log("SOCKET IS ALIVE! " + 3002);
+server.listen(80, () => {
+  console.log("SOCKET IS ALIVE! " + 80);
 });
 
 const PORT = process.env.PORT || 3001;
