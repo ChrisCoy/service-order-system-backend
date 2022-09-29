@@ -4,13 +4,8 @@ import validateSocketSession from "./validateSocketSession";
 import { valideAndReturnUser } from "../JWTUtil/JWT";
 import { Call, ICall } from "../models/Call";
 
-export default function socketServer(httpServer: http.Server) {
-  const io = new Server(httpServer, {
-    cors: {
-      origin: (process.env.TRUST_SOCKET_LINK as string) || true,
-      allowedHeaders: ["token"],
-    },
-  });
+export default function socketServer(httpServer: http.Server, io: Server) {
+
 
   io.use(validateSocketSession); //validate socket session
 
