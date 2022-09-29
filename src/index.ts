@@ -14,7 +14,7 @@ const server = http.createServer(app); //socket server
 
 const io = new Server(server, {
   cors: {
-    origin: (process.env.TRUST_SOCKET_LINK as string) || true,
+    origin: (process.env.TRUST_LINK as string) || true,
     allowedHeaders: ["token"],
   },
 }).listen(server);
