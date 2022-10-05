@@ -7,6 +7,7 @@ The back-end will create an admin account automatically, the default user and pa
 <h5>You can have a preview of the app at <a href="https://so-system.netlify.app/">https://so-system.netlify.app/</a>, please don't change admin account data.</h5>
 
 <h5>Check the front-end at <a href="https://github.com/ChrisCoy/service-order-system-frontend">here.</a></h5>
+<a href="https://www.figma.com/file/ZAOPhT1JWSB4Eoz62ODvFN/Projeto-Os?node-id=0%3A1">Layout skecth on figma.</a>
 </br>
 
 <h1>TODO🐍</h1>
